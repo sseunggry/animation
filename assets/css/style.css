@@ -1,0 +1,33 @@
+main.contents{transform: translate(100%, 0); transition: 0.5s;}
+main.contents.on{transform: translate(0, 0);}
+
+.loading-wrap{position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #fff; z-index: 11;}
+.loading-wrap.hide{display: none;}
+
+.loading-bar{position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); overflow: hidden; display: flex; align-items: center; padding-left: 50px; width: 260px; height: 116px; background: #F6F7FB; border-radius: 8px; box-sizing: border-box;}
+.loading-bar .img-list{margin-right: 20px; width: 52px; height: 100%; flex-shrink: 0;}
+.loading-bar .img-list li{display: flex; align-items: center; height: 100%;}
+.loading-bar .txt-list{position: relative; overflow: hidden; width: 100%; height: 40px;}
+.loading-bar .txt-list li{position: absolute; display: flex; align-items: center; height: 100%; opacity: 0; transform: translate(0, 20%); transition: opacity 0.5s, transform 0.3s;}
+.loading-bar .txt-list li.on{opacity: 1; transform: translate(0, 0);}
+
+.loading-step{padding: 70px 40px;}
+.loading-step .step-swiper{}
+.loading-step .step-swiper .swiper-slide{opacity: 0 !important;}
+.loading-step .step-swiper .swiper-slide-active{opacity: 1 !important;}
+
+.loading-step .step-swiper .swiper-slide li{font-size: 28px; font-weight: 700; overflow: hidden; height: 40px;}
+.loading-step .step-swiper .swiper-slide li span{display: inline-block; opacity: 0; transform: translate(0, 100%);}
+.loading-step .step-swiper .swiper-slide-active li span{opacity: 1; transform: translate(0, 0); transition: all 0.5s;}
+.loading-step .step-swiper .swiper-slide-active li:nth-child(1) span{transition-delay: 0s;}
+.loading-step .step-swiper .swiper-slide-active li:nth-child(2) span{transition-delay: 0.2s;}
+.loading-step .step-swiper .swiper-slide-active li:nth-child(3) span{transition-delay: 0.4s;}
+
+.loading-step img{margin-top: -100px; width: 100%; max-width: 320px;}
+
+.loading-step .info-box{position: relative; overflow: hidden; display: flex; align-items: center; width: 100%; height: 148px; background: #F6F7FB; border-radius: 8px; opacity: 0; transition: all 0.3s;}
+.loading-step .info-box.on{opacity: 1;}
+.loading-step .info-box .item{position: absolute; padding: 0 40px; width: 100%; opacity: 0; transform: translate(0, 20%); transition: all 0.5s;}
+.loading-step .info-box .item.on{opacity: 1; transform: translate(0, 0);}
+.loading-step .info-box .item .title{font-size: 20px; font-weight: 700;}
+.loading-step .info-box .item .desc{margin-top: 12px; font-size: 12px; color: #8692A0;}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+<meta http-equiv="X-UA-compatible" content="IE=edge">
+
+<meta http-equiv="subject" content="" />
+<meta http-equiv="title" content="" />
+<meta http-equiv="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta property="og:type" content="website">
+<meta property="og:title" content="">
+<meta property="og:description" content="">
+<meta property="og:image" content="">
+<meta property="og:url" content="">
+
+<link rel="stylesheet" type="text/css" href="./assets/css/plugin/swiper.min.css">
+<link rel="stylesheet" type="text/css" href="./assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+<script type="text/javascript" src="./assets/js/plugin/swiper.min.js"></script>
+<script type="text/javascript" src="./assets/js/plugin/jquery-3.4.1.min.js"></script>
+<title>pay2pay</title>
+
+</head>
+<body>
+    <div class="wrap">
+        <!-- contents -->
+        <main class="contents">
+            <div style="height: 300px; background: #000;">
+            </div>
+        </main>
+        <!-- // contents -->
+
+        <!-- loading-bar -->
+        <div class="loading-wrap">
+            <div class="loading-step">
+                <div class="swiper step-swiper">
+                    <div class="swiper-wrapper">
+                      <ul class="swiper-slide">
+                          <li><span>김디비님!</span></li>
+                          <li><span>자동차 정보를</span></li>
+                          <li><span>계산 중입니다</span></li>
+                      </ul>
+                      <ul class="swiper-slide">
+                          <li><span>계산중인</span></li>
+                          <li><span>운전자 정보를</span></li>
+                          <li><span>확인해 주세요</span></li>
+                      </ul>
+                      <ul class="swiper-slide">
+                          <li><span>계산중인</span></li>
+                          <li><span>할인 특약을</span></li>
+                          <li><span>확인해 주세요</span></li>
+                      </ul>
+                      <ul class="swiper-slide">
+                          <li><span>빠른 보험료</span></li>
+                          <li><span>계산이 거의</span></li>
+                          <li><span>끝나갑니다</span></li>
+                      </ul>
+                    </div>
+                </div>
+                <img src="./assets/img/loading_ani.png" alt="">
+                <div class="info-box">
+                    <div class="item">
+                        <h3 class="title"><span>기아 스포티지 2022B</span>더 올 뉴 스포티지 1.6 터보</h3>
+                        <p class="desc">5인승 노블레스 그래비티(4WD) | 3,052만원 <br/> 오토, 에어컨, 듀얼, IM, ABS</p>
+                    </div>
+                    <div class="item">
+                        <h3 class="title">부부 운전</h3>
+                        <p class="desc">만 35세 이상 연령특약</p>
+                    </div>
+                    <div class="item">
+                        <h3 class="title">할인 특약</h3>
+                        <p class="desc">주행거리 특약, 안전운전특약, Baby in Car 특약, 에버그린 특약, 프로미하트 나눔특약</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //loading-bar -->
+    </div>
+    <script>
+        const loadingWrap = $('.loading-wrap');
+        const mainCon = $('main.contents');
+        const infoBox = $('.loading-step .info-box');
+        const infoBoxItem = $('.loading-step .info-box .item');
+        var swiper = new Swiper(".step-swiper", {
+            effect: 'fade',
+            speed: 1000,
+            allowTouchMove: false,
+            touchRatio: 0,
+            autoplay: {
+                delay: 2000,
+                disableOnInteraction: false,
+            },
+            on: {
+                init: function(){
+                    infoBox.addClass('on');
+                    infoBoxItem.eq(0).addClass('on');
+                },
+                activeIndexChange: function(){
+                    const swiperIndex = $(this.wrapperEl).children().length;
+                    infoBoxItem.eq(this.realIndex).addClass('on').siblings().removeClass('on');
+
+                    if(this.realIndex == swiperIndex - 1) {
+                        this.autoplay.stop();
+                        infoBox.removeClass('on');
+                    }
+                }
+            }
+        });
+
+        $(function(){
+            //임시 : 데이터 로드 후 삭제
+            setTimeout(function(){
+                loadingBarHide();
+            }, 10000);
+        });
+
+        //로딩바 삭제
+        function loadingBarHide(){
+            loadingWrap.fadeOut('1000');
+            mainCon.addClass('on');
+        }
+    </script>
+</body>
+</html>

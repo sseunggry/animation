@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+<meta http-equiv="X-UA-compatible" content="IE=edge">
+
+<meta http-equiv="subject" content="" />
+<meta http-equiv="title" content="" />
+<meta http-equiv="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta property="og:type" content="website">
+<meta property="og:title" content="">
+<meta property="og:description" content="">
+<meta property="og:image" content="">
+<meta property="og:url" content="">
+
+<link rel="stylesheet" type="text/css" href="./assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+<script type="text/javascript" src="./assets/js/plugin/jquery-3.4.1.min.js"></script>
+<title>pay2pay</title>
+
+</head>
+<body>
+    <div class="wrap">
+        <!-- contents -->
+        <div class="contents">
+        </div>
+        <!-- // contents -->
+
+        <!-- loading-bar -->
+        <div class="loading-wrap">
+            <div class="loading-bar">
+                <ul class="img-list">
+                    <li><img src="./assets/img/loading_01.png" alt=""></li>
+                    <li><img src="./assets/img/loading_02.png" alt=""></li>
+                    <li><img src="./assets/img/loading_03.png" alt=""></li>
+                </ul>
+                <ul class="txt-list">
+                    <li><em>김디비</em>님!</li>
+                    <li>맞춤 보험료를</li>
+                    <li>계산중 입니다</li>
+                </ul>
+            </div>
+        </div>
+        <!-- //loading-bar -->
+    </div>
+    <script>
+        const loadingImgList = $('.loading-wrap .loading-bar .img-list');
+        const loadingImg = $('.loading-wrap .loading-bar .img-list li');
+        const loadingTxt = $('.loading-wrap .loading-bar .txt-list li');
+        let cnt = 0;
+
+        $(function(){
+           loadingBarFn(); 
+        });
+
+        function loadingBarFn(){
+            loadingImgList.css({'transform':'translate(0,' + -100*cnt + '%)', 'transition': '0.5s'});
+            loadingTxt.eq(cnt).addClass('on').siblings().removeClass('on');
+            cnt++;
+
+            if(cnt == loadingImg.length) return;
+            setTimeout(function(){
+                loadingBarFn();
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
