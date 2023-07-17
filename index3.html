@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+<meta http-equiv="X-UA-compatible" content="IE=edge">
+
+<meta http-equiv="subject" content="" />
+<meta http-equiv="title" content="" />
+<meta http-equiv="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta property="og:type" content="website">
+<meta property="og:title" content="">
+<meta property="og:description" content="">
+<meta property="og:image" content="">
+<meta property="og:url" content="">
+
+<link rel="stylesheet" type="text/css" href="./assets/css/plugin/swiper.min.css">
+<link rel="stylesheet" type="text/css" href="./assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+<script type="text/javascript" src="./assets/js/plugin/swiper.min.js"></script>
+<script type="text/javascript" src="./assets/js/plugin/jquery-3.4.1.min.js"></script>
+<title>animation</title>
+
+</head>
+<body>
+    <div class="wrap">
+        <!-- contents -->
+        <div class="test">
+            <div class="counter"></div>
+        </div>
+        <!-- // contents -->
+    </div>
+
+    <script>
+        $(function(){
+          $('.test .counter').rolNum({
+            number: 1508423,
+          });
+        })
+      
+        $.fn.rolNum = function(options) {
+          let $this = this;
+          if(options.number === undefined) return;
+      
+          let number    = options.number,
+              speed     = options.speed || 500,
+              interval  = options.interval || 100,
+              length    = options.length || String(options.number).split('').length;
+      
+          $this.css({'display': 'flex'}).text(number);
+      
+          let height = $this.height();
+          let width  = options.width || height/2;
+      
+          $this.empty(options);
+      
+          let numberHtml = '';
+          for(let i = 0; i < 10; i++){
+            numberHtml += `<span style="display: block; width: ${ width }px; height: ${ height }px; line-height: ${ height }px; text-align: center;}">
+                        ${ i }
+                      </span>`;
+          }
+          numberHtml = `<div class="_number" style="width: ${ width }px; height: ${ height }px; line-height: ${ height }px; display: flex; justify-content: center; align-items: center;">
+                          <div style="position: relative; width: ${ width }px; height: ${ height }px; overflow: hidden;">
+                            <div style="position: absolute; width: 100%;">${ numberHtml }</div>
+                          </div>
+                        </div>`
+      
+          $this.append(numberHtml.repeat(length));
+      
+          let numArr = String(number).split('');
+          let domArr = $this.find('._number');
+      
+          for(let i = 0; i < domArr.length; i++){
+            setTimeout(function(dom, n){
+              let index = $(dom).index();
+              console.log(index);
+      
+              if(n == 0){
+                dom.children[0].children[0].append(0);
+      
+                $(dom.children[0].children[0]).delay(200 * index).animate({
+                  'top' : -height * 10 + 'px'
+                }, speed);
+              } else {
+                $(dom.children[0].children[0]).delay(200 * index).animate({
+                  'top' : -height * n + 'px'
+                }, speed);
+              }
+            }, interval*(domArr.length - 1), domArr[i], numArr[i]);
+          }
+        
+        }
+    </script>
+</body>
+</html>
