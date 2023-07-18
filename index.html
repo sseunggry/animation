@@ -33,7 +33,7 @@
             <div class="box1">
                 <div class="fee-info">
                     <p>결제하실 보험료</p>
-                    <div class="counter">1,503,690</div>
+                    <div class="rolling-number">1,503,690</div>
                 </div>
                 <div class="sale-info">
                     <p>총 295,860 할인 받았어요!</p>
@@ -140,31 +140,33 @@
             }
         }
 
+        //rolling number
         function rollingNum(){
-            const counter = $('.fee-info .counter');
+            const counter = $('.fee-info .rolling-number');
             let height = counter.height();
             let width  = height/2;
             let length = counter.text().length;
-
-            counter.css({'display': 'flex'});
-
             let counterArr = counter.text().split('');
             let total = '';
             let numberHtml = '';
+
+            // counter.css({'display': 'flex'});
+
             for(let i = 0; i < 10; i++){
-                numberHtml += `<span style="display: block; width: ${ width }px; height: ${ height }px; line-height: ${ height }px; text-align: center;}">
-                            ${ i }
-                        </span>`;
+                // numberHtml += `<span style="display: block; width: ${ width }px; height: ${ height }px; line-height: ${ height }px; text-align: center;}">${ i }</span>`;
+                numberHtml += `<span>${ i }</span>`;
             }
-            numberHtml = `<div class="_number" style="width: ${ width }px; height: ${ height }px; line-height: ${ height }px; display: flex; justify-content: center; align-items: center;">
-                            <div style="position: relative; width: ${ width }px; height: ${ height }px; overflow: hidden;">
-                                <div style="position: absolute; width: 100%;">${ numberHtml }</div>
+            numberHtml = ` <div class="rolling-number-wrapper" style="width: ${ width }px; height: ${ height }px;">
+                                <p class="rolling-number-slide">${ numberHtml }</p>
                             </div>
-                            </div>`
+                            `
+            // numberHtml = `<div class="rolling-number-wrapper" style="position: relative; width: ${ width }px; height: ${ height }px; overflow: hidden;">
+            //                     <div class="rolling-number-slide" style="position: absolute; width: 100%;">${ numberHtml }</div>
+            //                 </div>`
 
             counterArr.forEach(function(el, idx){
                 if(el == ',') {
-                    total += `<div class="comma">,</div>`;
+                    total += `<p class="comma">,</p>`;
                 } else{
                     total += numberHtml;
                 }
@@ -173,6 +175,8 @@
             counter.empty();
             counter.append(total);
         }
+
+
         async function playAnimation(){
             await animate(".sale-more", animations.ani1);
             await animate(".box-list", animations.ani2);

@@ -46,3 +46,12 @@ main.contents.on{transform: translate(0, 0);}
 .sale-info{margin: 24px 0 20px; display: flex; align-items: center; height: 40px; background: #000; border-radius: 12px; color: #fff;}
 .sale-more{font-size: 14px;}
 /* .contents.test{position: relative; left: 100%;} */
+
+
+/* rolling css */
+.rolling-number{display: flex;}
+
+.rolling-number-wrapper{overflow: hidden; text-align: center;}
+
+.rolling-number-slide{display: flex; flex-direction: column;}
+.rolling-number-slide p{flex-shrink: 0;}
