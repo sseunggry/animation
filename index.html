@@ -21,6 +21,7 @@
 
 <link rel="stylesheet" type="text/css" href="./assets/css/common.css">
 <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script type="text/javascript" src="./assets/js/plugin/jquery-3.4.1.min.js"></script>
 <title>animation</title>
 
@@ -28,7 +29,19 @@
 <body>
     <div class="wrap">
         <!-- contents -->
-        <div class="contents">
+        <div class="contents test">
+            <div class="box1">
+                <div class="counter"></div>
+            </div>
+            <div class="box2">
+                box2
+            </div>
+            <ul class="box-list">
+               <li>box-item1</li> 
+               <li>box-item2</li> 
+               <li>box-item3</li> 
+               <li>box-item4</li> 
+            </ul>
         </div>
         <!-- // contents -->
 
@@ -50,13 +63,20 @@
         <!-- //loading-bar -->
     </div>
     <script>
+        const loadingWrap = $('.loading-wrap');
+        const mainCon = $('.contents');
         const loadingImgList = $('.loading-wrap .loading-bar .img-list');
         const loadingImg = $('.loading-wrap .loading-bar .img-list li');
         const loadingTxt = $('.loading-wrap .loading-bar .txt-list li');
         let cnt = 0;
 
         $(function(){
-           loadingBarFn(); 
+            loadingBarFn();
+
+            //임시 : 데이터 로드 후 삭제
+            setTimeout(function(){
+                loadingBarHide();
+            }, 3000);
         });
 
         function loadingBarFn(){
@@ -69,6 +89,80 @@
                 loadingBarFn();
             }, 1000);
         }
+
+        //로딩바 삭제
+        function loadingBarHide(){
+            loadingWrap.fadeOut('1000');
+            mainCon.animate({
+                left: 0
+            }, 500, function(){
+                new Promise(function(reslove){
+                    reslove();
+                })
+                .then(countRolling)
+                .then(ani2)
+            });
+        }
+
+        //gsap
+        gsap.fromTo(".box2", {
+            opacity: 0,
+            top: -20
+        }, {
+            opacity: 1,
+            top: 0,
+            duration: 0.5,
+            onComplete: () => {
+                
+            }
+        });
+
+        function countRolling(){
+            $('.test .box1').addClass('on');
+        }
+
+        // function test(){
+        //     return new Promise(function(reslove){
+        //         reslove();
+        //     });
+        // }
+
+        function ani1(){
+            setTimeout(function(){
+                $('.test .box1').addClass('on');
+                console.log(2);
+            }, 500);
+        }
+
+        function ani2(){
+            setTimeout(function(){
+                $('.test .box2').addClass('on');
+                console.log(345);
+            }, 1000);
+        }
+
+        // function ani1(){
+        //     return new Promise(function(reslove){
+        //         setTimeout(function(){
+        //             $('.test .box1').addClass('on');
+        //             console.log(2);
+        //         }, 500);
+        //     });
+        // }
+
+        // function ani2(){
+        //     return new Promise(function(resolve){
+        //         setTimeout(function(){
+        //             $('.test .box2').addClass('on');
+        //             console.log(345);
+        //         }, 1000);
+        //     });
+        // }
+
+        // let test = async function(){
+        //     await ani1();
+        //     await ani2();
+        // }
     </script>
 </body>
 </html>

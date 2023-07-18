@@ -31,3 +31,16 @@ main.contents.on{transform: translate(0, 0);}
 .loading-step .info-box .item.on{opacity: 1; transform: translate(0, 0);}
 .loading-step .info-box .item .title{font-size: 20px; font-weight: 700;}
 .loading-step .info-box .item .desc{margin-top: 12px; font-size: 12px; color: #8692A0;}
+
+
+/* test */
+.test{padding: 40px; color: #fff; background: #58acbb;}
+.test .box1.on{opacity: 1; transform: translate(0, 0);}
+.test .box2.on{opacity: 1; transform: translate(0, 0);}
+.test .box1{opacity: 0; transform: translate(0, -20%); transition: all 0.5s; display: flex; align-items: center; justify-content: center; width: 100%; height: 200px; background: #000; border-radius: 20px;}
+.test .box2{ display: flex; align-items: center; justify-content: center; margin: 20px 0 32px; width: 100%; height: 50px; background: #999; border-radius: 12px;}
+.test .box-list{}
+.test .box-list li{display: flex; align-items: center; justify-content: center; width: 100%; height: 80px; background: #ddd; border-radius: 12px;}
+.test .box-list li + li{margin-top: 20px;}
+
+.contents.test{position: relative; left: 100%;}
