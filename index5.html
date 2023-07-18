@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+<meta http-equiv="X-UA-compatible" content="IE=edge">
+
+<meta http-equiv="subject" content="" />
+<meta http-equiv="title" content="" />
+<meta http-equiv="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta property="og:type" content="website">
+<meta property="og:title" content="">
+<meta property="og:description" content="">
+<meta property="og:image" content="">
+<meta property="og:url" content="">
+
+<link rel="stylesheet" type="text/css" href="./assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script type="text/javascript" src="./assets/js/plugin/jquery-3.4.1.min.js"></script>
+<title>animation</title>
+
+</head>
+<body>
+    <div class="wrap">
+        <!-- contents -->
+        <div class="contents test">
+            <div class="box1">
+                <div class="counter"></div>
+            </div>
+            <div class="box2">
+                box2
+            </div>
+            <div class="box3">
+                box3
+            </div>
+            <ul class="box-list">
+               <li>box-item1</li> 
+               <li>box-item2</li> 
+               <li>box-item3</li> 
+               <li>box-item4</li> 
+            </ul>
+        </div>
+        <!-- // contents -->
+
+        <!-- loading-bar -->
+        <div class="loading-wrap">
+            <div class="loading-bar">
+                <ul class="img-list">
+                    <li><img src="./assets/img/loading_01.png" alt=""></li>
+                    <li><img src="./assets/img/loading_02.png" alt=""></li>
+                    <li><img src="./assets/img/loading_03.png" alt=""></li>
+                </ul>
+                <ul class="txt-list">
+                    <li><em>김디비</em>님!</li>
+                    <li>맞춤 보험료를</li>
+                    <li>계산중 입니다</li>
+                </ul>
+            </div>
+        </div>
+        <!-- //loading-bar -->
+    </div>
+    <script>
+        const loadingWrap = $('.loading-wrap');
+        const mainCon = $('.contents');
+        const loadingImgList = $('.loading-wrap .loading-bar .img-list');
+        const loadingImg = $('.loading-wrap .loading-bar .img-list li');
+        const loadingTxt = $('.loading-wrap .loading-bar .txt-list li');
+        let cnt = 0;
+
+        $(function(){
+            // loadingBarFn();
+
+            // //임시 : 데이터 로드 후 삭제
+            // setTimeout(function(){
+            //     loadingBarHide();
+            // }, 3000);
+
+            loadingBarHide();
+        });
+
+        function loadingBarFn(){
+            loadingImgList.css({'transform':'translate(0,' + -100*cnt + '%)', 'transition': '0.5s'});
+            loadingTxt.eq(cnt).addClass('on').siblings().removeClass('on');
+            cnt++;
+
+            if(cnt == loadingImg.length) return;
+            setTimeout(function(){
+                loadingBarFn();
+            }, 1000);
+        }
+
+        //로딩바 삭제
+        function loadingBarHide(){
+            loadingWrap.fadeOut('1000');
+            mainCon.animate({
+                left: 0
+            }, 500, function(){
+                Promise.resolve()
+                .then(rolingNum($(".counter"), {number:"5,805,567"}))
+                .then(playAnimations)
+            });
+        }
+
+        function animate(el, animation){
+            return new Promise(reslove => animation(el, reslove));
+        }
+
+        async function playAnimations(element) { 
+            let animations = {
+                ani1: (el, done) => {
+                    gsap.fromTo(el, {
+                        opacity: 0,
+                        y: 30
+                    }, {
+                        opacity: 1,
+                        y: 0,
+                        duration: 1,
+                        onComplete: done
+                    });
+                },
+                ani2: (el, done) => {
+                    gsap.fromTo(el, {
+                        opacity: 0,
+                        x: 100
+                    }, {
+                        opacity: 1,
+                        x: 0,
+                        duration: 0.5,
+                        onComplete: done
+                    });
+                }
+            }
+
+            await animate(".box2", animations.ani1);
+            await animate(".box3", animations.ani2);
+        }
+
+        async function rolingNum(el, options){
+            let $this     = el,
+                number    = options.number,
+                speed     = options.speed || 550,
+                interval  = options.interval || 200,
+                length    = options.length || String(options.number).split('').length;
+
+                $this.css({'display': 'flex'}).text(number);
+      
+                let height = $this.height();
+                let width  = options.width || height/2;
+            
+                $this.empty(options);
+            
+                let numberHtml = '';
+                for(let i = 0; i < 10; i++){
+                    numberHtml += `<span style="display: block; width: ${ width }px; height: ${ height }px; line-height: ${ height }px; text-align: center;}">
+                                   ${ i }
+                                   </span>`;
+                }
+                numberHtml = `<div class="_number" style="opacity:0; width: ${ width }px; height: ${ height }px; line-height: ${ height }px; justify-content: center; align-items: center;">
+                              <div style="position: relative; width: ${ width }px; height: ${ height }px; overflow: hidden;">
+                              <div style="position: absolute; width: 100%;">${ numberHtml }</div>
+                              </div>
+                              </div>`;
+
+                let comHtml = `
+                              <div style="position: relative; width: ${ width }px; height: ${ height }px; overflow: hidden;">
+                              <div style="position: absolute; width: 100%; top:10px;">
+                                <span style="display: block; width: ${ width }px; height: ${ height }px; line-height: ${ height }px; text-align: center;}">
+                                   ,
+                                </span>
+                              </div>
+                              </div>
+                              `;
+            
+                $this.append(numberHtml.repeat(length));
+            
+                let numArr = String(number).split('');
+                let domArr = $this.find('._number');
+
+                for(let i = 0; i < domArr.length; i++){
+                    setTimeout(function(dom, n){
+                        dom.style.opacity = 1;
+
+                        if(n == 0){
+                            dom.children[0].children[0].append(n);
+                
+                            $(dom.children[0].children[0]).animate({
+                            'top' : -height * 10 + 'px'
+                            }, speed);
+                        } else if(n == ',') {
+                            dom.innerHTML = comHtml;
+
+                            $(dom.children[0].children[0]).animate({
+                            'top' : '0px'
+                            }, speed);
+                        } else {
+                            $(dom.children[0].children[0]).animate({
+                            'top' : -height * n + 'px'
+                            }, speed);
+                        }
+                    }, interval*i, domArr[i], numArr[i]);
+                }
+
+
+        }
+    </script>
+</body>
+</html>

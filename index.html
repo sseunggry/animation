@@ -21,7 +21,7 @@
 
 <link rel="stylesheet" type="text/css" href="./assets/css/common.css">
 <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
 <script type="text/javascript" src="./assets/js/plugin/jquery-3.4.1.min.js"></script>
 <title>animation</title>
 
@@ -31,7 +31,18 @@
         <!-- contents -->
         <div class="contents test">
             <div class="box1">
-                <div class="counter"></div>
+                <div class="fee-info">
+                    <p>결제하실 보험료</p>
+                    <div class="counter">1,503,690</div>
+                </div>
+                <div class="sale-info">
+                    <p>총 295,860 할인 받았어요!</p>
+                </div>
+                <div class="sale-more">
+                    결제 후 돌려 받으세요! <br/>
+                    주행거리 예상환급금 <br/>
+                    카드결제혜택 <br/>
+                </div>
             </div>
             <div class="box2">
                 box2
@@ -46,7 +57,7 @@
         <!-- // contents -->
 
         <!-- loading-bar -->
-        <div class="loading-wrap">
+        <div class="loading-wrap" style="display: none">
             <div class="loading-bar">
                 <ul class="img-list">
                     <li><img src="./assets/img/loading_01.png" alt=""></li>
@@ -71,12 +82,14 @@
         let cnt = 0;
 
         $(function(){
-            loadingBarFn();
+            // loadingBarFn();
 
             //임시 : 데이터 로드 후 삭제
-            setTimeout(function(){
-                loadingBarHide();
-            }, 3000);
+            // setTimeout(function(){
+            //     loadingBarHide();
+            // }, 3000);
+
+            loadingBarHide();
         });
 
         function loadingBarFn(){
@@ -96,73 +109,132 @@
             mainCon.animate({
                 left: 0
             }, 500, function(){
-                new Promise(function(reslove){
-                    reslove();
-                })
-                .then(countRolling)
-                .then(ani2)
+                Promise.resolve()
+                .then(rollingNum)
+                .then(playAnimation)
             });
         }
 
-        //gsap
-        gsap.fromTo(".box2", {
-            opacity: 0,
-            top: -20
-        }, {
-            opacity: 1,
-            top: 0,
-            duration: 0.5,
-            onComplete: () => {
-                
+        let animations = {
+            ani1: (el, done) => {
+                gsap.fromTo(el, {
+                    opacity: 0,
+                    y: 30
+                }, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1,
+                    onComplete: done
+                });
+            },
+            ani2: (el, done) => {
+                gsap.fromTo(el, {
+                    opacity: 0,
+                    x: 100
+                }, {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.5,
+                    onComplete: done
+                });
             }
-        });
-
-        function countRolling(){
-            $('.test .box1').addClass('on');
         }
 
-        // function test(){
-        //     return new Promise(function(reslove){
-        //         reslove();
-        //     });
-        // }
+        function rollingNum(){
+            const counter = $('.fee-info .counter');
+            let height = counter.height();
+            let width  = height/2;
+            let length = counter.text().length;
 
-        function ani1(){
-            setTimeout(function(){
-                $('.test .box1').addClass('on');
-                console.log(2);
-            }, 500);
+            counter.css({'display': 'flex'});
+
+            let counterArr = counter.text().split('');
+            let total = '';
+            let numberHtml = '';
+            for(let i = 0; i < 10; i++){
+                numberHtml += `<span style="display: block; width: ${ width }px; height: ${ height }px; line-height: ${ height }px; text-align: center;}">
+                            ${ i }
+                        </span>`;
+            }
+            numberHtml = `<div class="_number" style="width: ${ width }px; height: ${ height }px; line-height: ${ height }px; display: flex; justify-content: center; align-items: center;">
+                            <div style="position: relative; width: ${ width }px; height: ${ height }px; overflow: hidden;">
+                                <div style="position: absolute; width: 100%;">${ numberHtml }</div>
+                            </div>
+                            </div>`
+
+            counterArr.forEach(function(el, idx){
+                if(el == ',') {
+                    total += `<div class="comma">,</div>`;
+                } else{
+                    total += numberHtml;
+                }
+            });
+        
+            counter.empty();
+            counter.append(total);
+        }
+        async function playAnimation(){
+            await animate(".sale-more", animations.ani1);
+            await animate(".box-list", animations.ani2);
         }
 
-        function ani2(){
-            setTimeout(function(){
-                $('.test .box2').addClass('on');
-                console.log(345);
-            }, 1000);
+        function animate(el, ani){
+            return new Promise(reslove => ani(el, reslove));
         }
 
-        // function ani1(){
-        //     return new Promise(function(reslove){
-        //         setTimeout(function(){
-        //             $('.test .box1').addClass('on');
-        //             console.log(2);
-        //         }, 500);
-        //     });
-        // }
-
-        // function ani2(){
-        //     return new Promise(function(resolve){
-        //         setTimeout(function(){
-        //             $('.test .box2').addClass('on');
-        //             console.log(345);
-        //         }, 1000);
-        //     });
-        // }
-
-        // let test = async function(){
-        //     await ani1();
-        //     await ani2();
-        // }
+        $.fn.rolNum = function(options) {
+          let $this = this;
+          if(options.number === undefined) return;
+      
+          let number    = options.number,
+              speed     = options.speed || 500,
+              interval  = options.interval || 100,
+              length    = options.length || String(options.number).split('').length;
+      
+          $this.css({'display': 'flex'}).text(number);
+      
+          let height = $this.height();
+          let width  = options.width || height/2;
+      
+          $this.empty(options);
+      
+          let numberHtml = '';
+          for(let i = 0; i < 10; i++){
+            numberHtml += `<span style="display: block; width: ${ width }px; height: ${ height }px; line-height: ${ height }px; text-align: center;}">
+                        ${ i }
+                      </span>`;
+          }
+          numberHtml = `<div class="_number" style="width: ${ width }px; height: ${ height }px; line-height: ${ height }px; display: flex; justify-content: center; align-items: center;">
+                          <div style="position: relative; width: ${ width }px; height: ${ height }px; overflow: hidden;">
+                            <div style="position: absolute; width: 100%;">${ numberHtml }</div>
+                          </div>
+                        </div>`
+      
+          $this.append(numberHtml.repeat(length));
+      
+          let numArr = String(number).split('');
+          let domArr = $this.find('._number');
+      
+          for(let i = 0; i < domArr.length; i++){
+            setTimeout(function(dom, n){
+              let index = $(dom).index();
+              console.log(index);
+      
+              if(n == 0){
+                dom.children[0].children[0].append(0);
+      
+                $(dom.children[0].children[0]).delay(200 * index).animate({
+                  'top' : -height * 10 + 'px'
+                }, speed);
+              } else {
+                $(dom.children[0].children[0]).delay(200 * index).animate({
+                  'top' : -height * n + 'px'
+                }, speed);
+              }
+            }, interval*(domArr.length - 1), domArr[i], numArr[i]);
+          }
+        
+        }
     </script>
 </body>
 </html>
