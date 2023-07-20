@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko-KR">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />
+<meta http-equiv="X-UA-compatible" content="IE=edge">
+
+<meta http-equiv="subject" content="" />
+<meta http-equiv="title" content="" />
+<meta http-equiv="author" content="" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta property="og:type" content="website">
+<meta property="og:title" content="">
+<meta property="og:description" content="">
+<meta property="og:image" content="">
+<meta property="og:url" content="">
+
+<link rel="stylesheet" type="text/css" href="./assets/css/common.css">
+<link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script type="text/javascript" src="./assets/js/plugin/jquery-3.4.1.min.js"></script>
+<script src="./assets/js/plugin/lottie.min.js"></script>
+<title>animation</title>
+
+</head>
+<body>
+    <div class="wrap">
+        <!-- contents -->
+        <div class="contents test">
+            <div class="fee-info">
+                <div class="lottie_box"></div>
+                <div class="roll-num">1,542,650</div>
+            </div>
+            <div class="sale-info-wrap">
+                <p class="sale-info bg-color">총 562,450원 할인됩니다</p>
+            </div>
+            <div class="box3">
+                box3
+            </div>
+            <ul class="box-list">
+               <li>box-item1</li> 
+               <li>box-item2</li> 
+               <li>box-item3</li> 
+               <li>box-item4</li> 
+            </ul>
+        </div>
+        <!-- // contents -->
+
+        <!-- loading-bar -->
+        <div class="loading-wrap">
+            <div class="loading-bar">
+                <ul class="img-list">
+                    <li><img src="./assets/img/loading_01.png" alt=""></li>
+                    <li><img src="./assets/img/loading_02.png" alt=""></li>
+                    <li><img src="./assets/img/loading_03.png" alt=""></li>
+                </ul>
+                <ul class="txt-list">
+                    <li><em>김디비</em>님!</li>
+                    <li>맞춤 보험료를</li>
+                    <li>계산중 입니다</li>
+                </ul>
+            </div>
+        </div>
+        <!-- //loading-bar -->
+    </div>
+    <script>
+        const loadingWrap = $('.loading-wrap');
+        const mainCon = $('.contents');
+        const loadingImgList = $('.loading-wrap .loading-bar .img-list');
+        const loadingImg = $('.loading-wrap .loading-bar .img-list li');
+        const loadingTxt = $('.loading-wrap .loading-bar .txt-list li');
+        const rollNum = $('.fee-info .roll-num');
+        const rollNumTxt = rollNum.text().trim();
+        const saleInfoBg = $('.sale-info-wrap .sale-info.normal');
+        let cnt = 0;
+
+        $(function(){
+        // loadingBarFn();
+            loadingBarHide();
+
+            var animation1 = bodymovin.loadAnimation({
+                container: $('.lottie_box')[0], // Required
+                path: './assets/js/plugin/animation.json',
+                renderer: 'svg', // Required
+                // loop: true, // Optional
+                autoplay: true // Optional
+            });
+        });
+
+        function loadingBarFn(){
+            loadingImgList.css({'transform':'translate(0,' + -100*cnt + '%)', 'transition': '0.5s'});
+            loadingTxt.eq(cnt).addClass('on').siblings().removeClass('on');
+            cnt++;
+
+            if(cnt == loadingImg.length) return;
+            setTimeout(function(){
+                loadingBarFn();
+            }, 1000);
+        }
+
+        //로딩바 삭제 후 이벤트
+        function loadingBarHide(){
+            loadingWrap.fadeOut('1000');
+            mainCon.animate({
+                opacity: 1
+            }, 500, function(){
+                let start = new Promise(reslove => rollingNum(reslove));
+                // Promise.resolve()
+                    // .then(rollingNum)
+                    start.then(playAnimations)
+            });
+        }
+
+        function animate(el, ani){
+            return new Promise(reslove => ani(el, reslove));
+        }
+
+        async function playAnimations(){
+            await animate('.sale-info-wrap', animations.ani1);
+            await animate('.box3', animations.ani2);
+        }
+
+        let animations = {
+            ani1: (el, done) => {gsap.fromTo(el, 
+                {opacity: 0, y: 30 }, 
+                {opacity: 1, y: 0, duration: 1, onComplete: done});
+            },
+            ani2: (el, done) => { gsap.fromTo(el, 
+                {opacity: 0, x: 100}, 
+                {opacity: 1, x: 0, duration: 0.5, onComplete: done});
+            }
+        }
+
+        //rolling number
+        function rollingNum(resolve){
+            let height = rollNum.height();
+            let width  = height/2;
+            let length = rollNumTxt.length;
+            let rollNumArr = rollNumTxt.split('');
+            let total = '';
+            let numberHtml = '';
+            let timer = 0;
+
+            for(let i = 0; i < 10; i++){
+                numberHtml += `<span>${ i }</span>`;
+            }
+            numberHtml = ` <div class="rolling-number-wrapper" style="height: ${ height }px;"><p class="rolling-number-slide">${ numberHtml }</p></div>`
+
+            rollNumArr.forEach(function(el, idx){
+                if(el == ',') {
+                    total += `<p class="comma">,</p>`;
+                } else{
+                    total += numberHtml;
+                }
+            });
+
+            rollNum.html(total);
+            rollNum.children().map(function(idx, el) {
+                let $el = $(el),
+                    $slide = $el.find('.rolling-number-slide'),
+                    duration = 0.8,
+                    speed = 500,
+                    num = 0;
+
+                if(rollNumTxt[idx] == ','){
+                    $slide = $el;
+                    duration = 0.5;
+                } else {
+                    $slide.append('<span>'+rollNumTxt[idx]+'</span>');
+                    num = 10;
+                }
+                
+                rollNum.css({'opacity': 1});
+                $slide.delay(120*idx).animate({
+                    'top': -height * num + 'px',
+                    'opacity':1
+                },speed);
+
+                timer = speed + (200)*idx;
+            })
+
+            setTimeout(function(){
+                resolve();
+            }, timer);
+        }
+    </script>
+</body>
+</html>

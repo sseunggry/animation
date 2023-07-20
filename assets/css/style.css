@@ -34,24 +34,20 @@ main.contents.on{transform: translate(0, 0);}
 
 
 /* test */
-.test{padding: 40px; background: #eee;}
+.test{padding: 40px; color: #fff; background: #000;}
 .test .box1.on{opacity: 1; transform: translate(0, 0);}
 .test .box2.on{opacity: 1; transform: translate(0, 0);}
-.test .box1{padding: 20px; width: 100%; background: #fff; border-radius: 20px; box-sizing: border-box;}
-.test .box2{ display: flex; align-items: center; justify-content: center; margin: 20px 0 32px; width: 100%; height: 50px; background: #999; border-radius: 12px;}
+.test .box1{opacity: 1; transform: translate(0, -20%); transition: all 0.5s; display: flex; align-items: center; justify-content: center; width: 100%; height: 200px; background: #000; border-radius: 20px;}
+.test .box2{opacity: 0; display: flex; align-items: center; justify-content: center; margin: 20px 0 32px; width: 100%; height: 50px; background: #999; border-radius: 12px;}
+.test .box3{opacity: 0; display: flex; align-items: center; justify-content: center; margin: 20px 0 32px; width: 100%; height: 50px; background: #999; border-radius: 12px;}
 .test .box-list{}
 .test .box-list li{display: flex; align-items: center; justify-content: center; width: 100%; height: 80px; background: #ddd; border-radius: 12px;}
 .test .box-list li + li{margin-top: 20px;}
 
-.sale-info{margin: 24px 0 20px; display: flex; align-items: center; height: 40px; background: #000; border-radius: 12px; color: #fff;}
-.sale-more{font-size: 14px;}
-/* .contents.test{position: relative; left: 100%;} */
+.roll-num{font-size: 32px; display: flex; opacity: 0; transition: all 0.3s;}
+.rolling-number-wrapper{overflow: hidden;}
+.rolling-number-slide{position: relative; display: flex; flex-direction: column; opacity: 0;}
+.rolling-number-slide span{flex-shrink: 0;}
+.roll-num .comma{position: relative; top: 10px; opacity: 0;}
 
-
-/* rolling css */
-.rolling-number{display: flex;}
-
-.rolling-number-wrapper{overflow: hidden; text-align: center;}
-
-.rolling-number-slide{display: flex; flex-direction: column;}
-.rolling-number-slide p{flex-shrink: 0;}
+.lottie_box{width: 50px; height: 50px;}
